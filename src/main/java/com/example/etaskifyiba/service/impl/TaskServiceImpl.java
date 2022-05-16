@@ -4,17 +4,19 @@ import com.example.etaskifyiba.dto.TaskDTO;
 import com.example.etaskifyiba.dto.request.TaskRequest;
 import com.example.etaskifyiba.dto.response.TaskResponse;
 import com.example.etaskifyiba.exception.CustomNotFoundException;
-import com.example.etaskifyiba.exception.handling.ErrorCodeEnum;
 import com.example.etaskifyiba.model.entity.Task;
-import com.example.etaskifyiba.model.entity.UserTask;
+import com.example.etaskifyiba.model.entity.User;
+import com.example.etaskifyiba.exception.handling.ErrorCodeEnum;
 import com.example.etaskifyiba.model.enums.Status;
 import com.example.etaskifyiba.repository.TaskRepository;
-import com.example.etaskifyiba.repository.UserTaskRepository;
+import com.example.etaskifyiba.repository.UserRepository;
 import com.example.etaskifyiba.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,7 +25,7 @@ public class TaskServiceImpl implements TaskService {
 
     private final TaskRepository taskRepository;
 
-    private final UserTaskRepository userTaskRepository;
+    private final UserRepository userRepository;
 
     @Override
     public TaskResponse getAllTaskByOrgId(long id) {
@@ -69,18 +71,14 @@ public class TaskServiceImpl implements TaskService {
                 .status(Status.valueOf(taskRequest.getStatus()))
                 .build();
         Task save = taskRepository.save(task);
-//        Set<Task> taskSet = new HashSet<>();
-//        taskSet.add(save);
+        Set<Task> taskSet = new HashSet<>();
+        taskSet.add(save);
         taskRequest.getAssignId()
                 .forEach(id -> {
-                    UserTask userTask = new UserTask();
-                    userTask.setTaskId(save.getId());
-                    userTask.setUserId(id);
-                    userTaskRepository.save(userTask);
-//                    User user = userRepository.findById(id)
-//                            .orElseThrow(() -> new CustomNotFoundException(ErrorCodeEnum.USER_NOT_FOUND));
-//                    user.setTasks(taskSet);
-//                    userRepository.save(user);
+                    User user = userRepository.findById(id)
+                            .orElseThrow(() -> new CustomNotFoundException(ErrorCodeEnum.USER_NOT_FOUND));
+                    user.setTasks(taskSet);
+                    userRepository.save(user);
                 });
     }
 

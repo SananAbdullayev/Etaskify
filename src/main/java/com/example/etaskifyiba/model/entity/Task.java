@@ -35,6 +35,10 @@ public class Task {
     private Date deadline;
 
     @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "user_task",
+            joinColumns = @JoinColumn(name = "task_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
     @ToString.Exclude
     private Set<User> users;
 
