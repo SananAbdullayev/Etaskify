@@ -4,12 +4,15 @@ import com.example.etaskifyiba.dto.TaskDTO;
 import com.example.etaskifyiba.dto.request.TaskRequest;
 import com.example.etaskifyiba.dto.response.TaskResponse;
 import com.example.etaskifyiba.exception.CustomNotFoundException;
+import com.example.etaskifyiba.model.entity.Organization;
 import com.example.etaskifyiba.model.entity.Task;
 import com.example.etaskifyiba.model.entity.User;
 import com.example.etaskifyiba.exception.handling.ErrorCodeEnum;
 import com.example.etaskifyiba.model.enums.Status;
+import com.example.etaskifyiba.repository.OrganizationRepository;
 import com.example.etaskifyiba.repository.TaskRepository;
 import com.example.etaskifyiba.repository.UserRepository;
+import com.example.etaskifyiba.security.JwtUtils;
 import com.example.etaskifyiba.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,8 +30,12 @@ public class TaskServiceImpl implements TaskService {
 
     private final UserRepository userRepository;
 
+    private final OrganizationRepository organizationRepository;
+
+    private final JwtUtils jwtUtils;
+
     @Override
-    public TaskResponse getAllTaskByOrgId(long id) {
+    public TaskResponse getAllTaskByOrgId(int id) {
         List<TaskDTO> taskList = taskRepository.findAllByOrganizationId(id)
                 .stream()
                 .map(this::convertToDto)
@@ -64,22 +71,8 @@ public class TaskServiceImpl implements TaskService {
     }
 
     public void create(TaskRequest taskRequest) {
-//        Task task = Task.builder()
-//                .title(taskRequest.getTitle())
-//                .description(taskRequest.getDescription())
-//                .deadline(taskRequest.getDeadline())
-//                .status(Status.valueOf(taskRequest.getStatus()))
-//                .build();
-//        Task save = taskRepository.save(task);
-//        Set<Task> taskSet = new HashSet<>();
-//        taskSet.add(save);
-//        taskRequest.getAssignId()
-//                .forEach(id -> {
-//                    User user = userRepository.findById(id)
-//                            .orElseThrow(() -> new CustomNotFoundException(ErrorCodeEnum.USER_NOT_FOUND));
-//                    user.setTasks(taskSet);
-//                    userRepository.save(user);
-//                });
+        Organization organization = organizationRepository.findByUserUsername(jwtUtils.getUserNameFromJwtToken())
+                .orElseThrow(() -> new CustomNotFoundException(ErrorCodeEnum.ORGANIZATION_NOT_FOUND));
 
         Set<User> users = new HashSet<>();
         taskRequest.getAssignId()
@@ -94,6 +87,7 @@ public class TaskServiceImpl implements TaskService {
                 .deadline(taskRequest.getDeadline())
                 .status(Status.valueOf(taskRequest.getStatus()))
                 .users(users)
+                .organization(organization)
                 .build();
         taskRepository.save(task);
     }

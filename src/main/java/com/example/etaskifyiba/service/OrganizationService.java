@@ -2,7 +2,6 @@ package com.example.etaskifyiba.service;
 
 import com.example.etaskifyiba.dto.OrganizationDTO;
 import com.example.etaskifyiba.dto.request.OrganizationRequest;
-import com.example.etaskifyiba.dto.request.SignUpRequest;
 
 import java.util.List;
 

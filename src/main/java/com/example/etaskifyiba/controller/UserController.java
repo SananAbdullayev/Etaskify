@@ -2,7 +2,6 @@ package com.example.etaskifyiba.controller;
 
 import com.example.etaskifyiba.dto.UserDTO;
 import com.example.etaskifyiba.dto.request.UserRequest;
-import com.example.etaskifyiba.dto.response.TaskResponse;
 import com.example.etaskifyiba.dto.response.UserResponse;
 import com.example.etaskifyiba.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -36,14 +35,14 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void updateUser(@PathVariable(name = "id") long id,
                            @RequestBody UserRequest userRequest) {
         userService.update(id, userRequest);
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void deleteUser(@PathVariable(name = "id") long id) {
         userService.delete(id);
     }

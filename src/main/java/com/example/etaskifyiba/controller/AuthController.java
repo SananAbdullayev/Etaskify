@@ -4,6 +4,8 @@ import com.example.etaskifyiba.dto.request.LoginRequest;
 import com.example.etaskifyiba.dto.request.SignUpRequest;
 import com.example.etaskifyiba.dto.response.MessageResponse;
 import com.example.etaskifyiba.dto.response.UserInfoResponse;
+import com.example.etaskifyiba.exception.AlreadyExistException;
+import com.example.etaskifyiba.exception.handling.ErrorCodeEnum;
 import com.example.etaskifyiba.model.entity.Organization;
 import com.example.etaskifyiba.model.entity.User;
 import com.example.etaskifyiba.model.enums.Role;
@@ -24,9 +26,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -61,12 +61,11 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
+            throw new AlreadyExistException(ErrorCodeEnum.USERNAME_ALREADY_EXIST);
         }
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
+            throw new AlreadyExistException(ErrorCodeEnum.EMAIL_ALREADY_EXIST);
         }
-        // Create new user's account
 
         Organization organization = Organization.builder()
                 .name(signUpRequest.getOrganizationName())
@@ -83,7 +82,6 @@ public class AuthController {
                 .role(Role.ADMIN)
                 .organization(organization)
                 .build();
-
 
         userRepository.save(user);
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));

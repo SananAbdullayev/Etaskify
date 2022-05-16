@@ -28,9 +28,11 @@ public class Organization {
     private String address;
 
     @OneToMany(mappedBy = "organization",cascade = CascadeType.ALL)
+    @ToString.Exclude
     private Set<User> user;
 
     @OneToMany(mappedBy = "organization",cascade = CascadeType.ALL)
+    @ToString.Exclude
     private Set<Task> task;
 
 }

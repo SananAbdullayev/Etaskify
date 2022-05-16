@@ -19,7 +19,7 @@ public class TaskController {
     private final TaskService taskService;
 
     @GetMapping("/org/{orgId}")
-    public TaskResponse getAllTaskByOrgId(@PathVariable(name = "orgId") long id) {
+    public TaskResponse getAllTaskByOrgId(@PathVariable(name = "orgId") int id) {
         return taskService.getAllTaskByOrgId(id);
     }
 
@@ -40,20 +40,20 @@ public class TaskController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void createTask(@Valid @RequestBody TaskRequest taskRequest) {
         taskService.create(taskRequest);
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void updateTaskById(@PathVariable(name = "id") long id,
                                @Valid @RequestBody TaskRequest taskRequest) {
         taskService.update(id, taskRequest);
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void deleteTaskById(@PathVariable(name = "id") long id) {
         taskService.delete(id);
     }

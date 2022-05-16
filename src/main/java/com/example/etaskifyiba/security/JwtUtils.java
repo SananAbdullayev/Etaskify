@@ -7,6 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.WebUtils;
 
@@ -32,8 +35,13 @@ public class JwtUtils {
     @Value("${etaskify.jwtCookieName}")
     private String jwtCookie;
 
+    public String getUserNameFromJwtToken() {
+        SecurityContext context = SecurityContextHolder.getContext();
+        UserDetails userDetails = (UserDetails) context.getAuthentication().getPrincipal();
+        return userDetails.getUsername();
+    }
+
     public String getJwtFromCookies(HttpServletRequest request) {
-//        log.debug(String.valueOf(configuration));
         Cookie cookie = WebUtils.getCookie(request, jwtCookie);
         if (cookie != null) {
             return cookie.getValue();

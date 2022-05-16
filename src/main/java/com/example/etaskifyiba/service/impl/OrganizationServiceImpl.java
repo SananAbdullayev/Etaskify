@@ -1,11 +1,10 @@
 package com.example.etaskifyiba.service.impl;
 
 import com.example.etaskifyiba.dto.OrganizationDTO;
-import com.example.etaskifyiba.dto.UserDTO;
 import com.example.etaskifyiba.dto.request.OrganizationRequest;
 import com.example.etaskifyiba.exception.CustomNotFoundException;
-import com.example.etaskifyiba.model.entity.Organization;
 import com.example.etaskifyiba.exception.handling.ErrorCodeEnum;
+import com.example.etaskifyiba.model.entity.Organization;
 import com.example.etaskifyiba.repository.OrganizationRepository;
 import com.example.etaskifyiba.service.OrganizationService;
 import lombok.RequiredArgsConstructor;

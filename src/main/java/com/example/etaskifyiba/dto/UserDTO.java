@@ -1,6 +1,5 @@
 package com.example.etaskifyiba.dto;
 
-import com.example.etaskifyiba.model.entity.Task;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

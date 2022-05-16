@@ -57,21 +57,21 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-        String fieldName = Objects.requireNonNull(e.getBindingResult().getFieldError()).getField();
+        String message = Objects.requireNonNull(e.getBindingResult().getFieldError()).getDefaultMessage();
         return ErrorResponse.builder()
                 .code(ErrorCodeEnum.VALIDATION_ERROR.getCode())
-                .message(fieldName + ErrorCodeEnum.VALIDATION_ERROR.getMessage())
+                .message(message)
                 .build();
     }
 
-//    @ExceptionHandler(Exception.class)
-//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-//    public ErrorResponse handleUnknownException(Exception e) {
-//        return ErrorResponse.builder()
-//                .code(ErrorCodeEnum.UNKNOWN_ERROR.getCode())
-//                .message(ErrorCodeEnum.UNKNOWN_ERROR.getMessage())
-//                .build();
-//    }
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handleUnknownException(Exception e) {
+        return ErrorResponse.builder()
+                .code(ErrorCodeEnum.UNKNOWN_ERROR.getCode())
+                .message(ErrorCodeEnum.UNKNOWN_ERROR.getMessage())
+                .build();
+    }
 
     @ExceptionHandler(IOException.class)
     public ErrorResponse handleIOException(IOException e) {
@@ -97,6 +97,4 @@ public class GlobalExceptionHandler {
                 .message(e.getMessage())
                 .build();
     }
-
-
 }

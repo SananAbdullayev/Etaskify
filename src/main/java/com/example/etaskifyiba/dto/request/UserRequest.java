@@ -1,6 +1,7 @@
 package com.example.etaskifyiba.dto.request;
 
 import com.example.etaskifyiba.validator.UniqueEmail;
+import com.example.etaskifyiba.validator.UniqueUsername;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,7 @@ public class UserRequest {
     @NotBlank
     private String surname;
     @NotBlank
+    @UniqueUsername
     private String username;
     @Email
     @NotBlank

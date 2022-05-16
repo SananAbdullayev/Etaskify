@@ -6,7 +6,7 @@ import com.example.etaskifyiba.dto.response.TaskResponse;
 import com.example.etaskifyiba.model.enums.Status;
 
 public interface TaskService {
-    TaskResponse getAllTaskByOrgId(long id);
+    TaskResponse getAllTaskByOrgId(int id);
 
     void create(TaskRequest taskRequest);
 

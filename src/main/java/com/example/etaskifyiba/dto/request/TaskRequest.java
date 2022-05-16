@@ -1,6 +1,5 @@
 package com.example.etaskifyiba.dto.request;
 
-import com.example.etaskifyiba.model.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,9 +21,8 @@ public class TaskRequest {
     @Enumerated(EnumType.STRING)
     @NotBlank
     private String status;
-    //    @NotBlank
+    @NotBlank
     private Date deadline;
-    private Integer orgId;
-//    @NotBlank
+    @NotBlank
     private List<Long> assignId;
 }
