@@ -21,7 +21,7 @@ public class TaskRequest {
     @Enumerated(EnumType.STRING)
     @NotBlank
     private String status;
-    @NotBlank
+//    @NotBlank
     private Date deadline;
     @NotBlank
     private List<Long> assignId;

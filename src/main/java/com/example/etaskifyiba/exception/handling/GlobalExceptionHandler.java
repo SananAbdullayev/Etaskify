@@ -64,14 +64,14 @@ public class GlobalExceptionHandler {
                 .build();
     }
 
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponse handleUnknownException(Exception e) {
-        return ErrorResponse.builder()
-                .code(ErrorCodeEnum.UNKNOWN_ERROR.getCode())
-                .message(ErrorCodeEnum.UNKNOWN_ERROR.getMessage())
-                .build();
-    }
+//    @ExceptionHandler(Exception.class)
+//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+//    public ErrorResponse handleUnknownException(Exception e) {
+//        return ErrorResponse.builder()
+//                .code(ErrorCodeEnum.UNKNOWN_ERROR.getCode())
+//                .message(ErrorCodeEnum.UNKNOWN_ERROR.getMessage())
+//                .build();
+//    }
 
     @ExceptionHandler(IOException.class)
     public ErrorResponse handleIOException(IOException e) {
