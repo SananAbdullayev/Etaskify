@@ -86,9 +86,8 @@ public class UserServiceImpl implements UserService {
     }
 
     private UserDTO convertToDto(User user) {
-        Set<Task> tasks = user.getTasks();
 
-        Set<TaskDTO> set = tasks.stream()
+        Set<TaskDTO> taskDTOSet = user.getTasks().stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toSet());
 
@@ -98,7 +97,7 @@ public class UserServiceImpl implements UserService {
                 .surname(user.getSurname())
                 .email(user.getEmail())
                 .username(user.getUsername())
-                .tasks(set)
+                .tasks(taskDTOSet)
                 .build();
     }
 
