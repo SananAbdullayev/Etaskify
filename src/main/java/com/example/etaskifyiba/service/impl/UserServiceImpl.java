@@ -1,9 +1,11 @@
 package com.example.etaskifyiba.service.impl;
 
+import com.example.etaskifyiba.dto.TaskDTO;
 import com.example.etaskifyiba.dto.UserDTO;
 import com.example.etaskifyiba.dto.request.UserRequest;
 import com.example.etaskifyiba.dto.response.UserResponse;
 import com.example.etaskifyiba.exception.CustomNotFoundException;
+import com.example.etaskifyiba.model.entity.Task;
 import com.example.etaskifyiba.model.entity.User;
 import com.example.etaskifyiba.exception.handling.ErrorCodeEnum;
 import com.example.etaskifyiba.model.enums.Role;
@@ -13,8 +15,10 @@ import com.example.etaskifyiba.util.PasswordGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -82,14 +86,28 @@ public class UserServiceImpl implements UserService {
     }
 
     private UserDTO convertToDto(User user) {
+        Set<Task> tasks = user.getTasks();
+
+        Set<TaskDTO> set = tasks.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toSet());
+
         return UserDTO.builder()
                 .id(user.getId())
                 .name(user.getName())
                 .surname(user.getSurname())
                 .email(user.getEmail())
-                .password(user.getPassword())
                 .username(user.getUsername())
-                .tasks(user.getTasks())
+                .tasks(set)
+                .build();
+    }
+
+    private TaskDTO convertToDto(Task task) {
+        return TaskDTO.builder()
+                .title(task.getTitle())
+                .description(task.getDescription())
+                .status(task.getStatus())
+                .deadline(task.getDeadline())
                 .build();
     }
 

@@ -18,6 +18,5 @@ public class UserDTO {
     private String surname;
     private String username;
     private String email;
-    private String password;
-    private Set<Task> tasks;
+    private Set<TaskDTO> tasks;
 }

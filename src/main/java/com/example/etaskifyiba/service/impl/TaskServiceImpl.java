@@ -64,22 +64,38 @@ public class TaskServiceImpl implements TaskService {
     }
 
     public void create(TaskRequest taskRequest) {
+//        Task task = Task.builder()
+//                .title(taskRequest.getTitle())
+//                .description(taskRequest.getDescription())
+//                .deadline(taskRequest.getDeadline())
+//                .status(Status.valueOf(taskRequest.getStatus()))
+//                .build();
+//        Task save = taskRepository.save(task);
+//        Set<Task> taskSet = new HashSet<>();
+//        taskSet.add(save);
+//        taskRequest.getAssignId()
+//                .forEach(id -> {
+//                    User user = userRepository.findById(id)
+//                            .orElseThrow(() -> new CustomNotFoundException(ErrorCodeEnum.USER_NOT_FOUND));
+//                    user.setTasks(taskSet);
+//                    userRepository.save(user);
+//                });
+
+        Set<User> users = new HashSet<>();
+        taskRequest.getAssignId()
+                .forEach(id -> {
+                    User user = userRepository.findById(id)
+                            .orElseThrow(() -> new CustomNotFoundException(ErrorCodeEnum.USER_NOT_FOUND));
+                    users.add(user);
+                });
         Task task = Task.builder()
                 .title(taskRequest.getTitle())
                 .description(taskRequest.getDescription())
                 .deadline(taskRequest.getDeadline())
                 .status(Status.valueOf(taskRequest.getStatus()))
+                .users(users)
                 .build();
-        Task save = taskRepository.save(task);
-        Set<Task> taskSet = new HashSet<>();
-        taskSet.add(save);
-        taskRequest.getAssignId()
-                .forEach(id -> {
-                    User user = userRepository.findById(id)
-                            .orElseThrow(() -> new CustomNotFoundException(ErrorCodeEnum.USER_NOT_FOUND));
-                    user.setTasks(taskSet);
-                    userRepository.save(user);
-                });
+        taskRepository.save(task);
     }
 
     @Override
