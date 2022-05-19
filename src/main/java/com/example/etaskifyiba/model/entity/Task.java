@@ -4,7 +4,7 @@ import com.example.etaskifyiba.model.enums.Status;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
@@ -31,7 +31,7 @@ public class Task {
     private Status status;
 
     @Column(name = "deadline")
-    private Date deadline;
+    private LocalDate deadline;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(

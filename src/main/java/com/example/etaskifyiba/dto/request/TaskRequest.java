@@ -1,5 +1,6 @@
 package com.example.etaskifyiba.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,7 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.validation.constraints.NotBlank;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -21,6 +22,7 @@ public class TaskRequest {
     @Enumerated(EnumType.STRING)
     @NotBlank
     private String status;
-    private Date deadline;
+    @JsonFormat(pattern="yyyy-MM-dd")
+    private LocalDate deadline;
     private List<Long> assignId;
 }
