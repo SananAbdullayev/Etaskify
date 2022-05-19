@@ -1,22 +1,27 @@
 package com.example.etaskifyiba.service.impl;
 
+import com.example.etaskifyiba.dto.MailDTO;
 import com.example.etaskifyiba.dto.TaskDTO;
 import com.example.etaskifyiba.dto.request.TaskRequest;
 import com.example.etaskifyiba.dto.response.TaskResponse;
 import com.example.etaskifyiba.exception.CustomNotFoundException;
+import com.example.etaskifyiba.exception.handling.ErrorCodeEnum;
 import com.example.etaskifyiba.model.entity.Organization;
 import com.example.etaskifyiba.model.entity.Task;
 import com.example.etaskifyiba.model.entity.User;
-import com.example.etaskifyiba.exception.handling.ErrorCodeEnum;
 import com.example.etaskifyiba.model.enums.Status;
 import com.example.etaskifyiba.repository.OrganizationRepository;
 import com.example.etaskifyiba.repository.TaskRepository;
 import com.example.etaskifyiba.repository.UserRepository;
 import com.example.etaskifyiba.security.JwtUtils;
+import com.example.etaskifyiba.service.MailService;
 import com.example.etaskifyiba.service.TaskService;
+import com.example.etaskifyiba.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -29,6 +34,10 @@ public class TaskServiceImpl implements TaskService {
     private final TaskRepository taskRepository;
 
     private final UserRepository userRepository;
+
+    private final MailService mailService;
+
+    private final UserService userService;
 
     private final OrganizationRepository organizationRepository;
 
@@ -89,6 +98,21 @@ public class TaskServiceImpl implements TaskService {
                 .users(users)
                 .organization(organization)
                 .build();
+
+        users.forEach(id ->
+                {
+                    try {
+                        mailService.sendMail(
+                                MailDTO.builder()
+                                        .mailTo(userService.getUser(id.getId()).getEmail())
+                                        .mailSubject(taskRequest.getTitle())
+                                        .mailContent(taskRequest.getDescription())
+                                        .build());
+                    } catch (MessagingException e) {
+                        e.printStackTrace();
+                    }
+                }
+        );
         taskRepository.save(task);
     }
 
